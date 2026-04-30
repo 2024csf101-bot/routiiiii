@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pakistan Route Optimizer</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body { font-family: Arial; margin:0; }
+    #map { height: 400px; }
+    .controls { padding: 10px; }
+  </style>
+</head>
+<body>
+
+<h2 style="padding:10px;">Pakistan Route Optimizer 🚗</h2>
+
+<div id="map"></div>
+
+<div class="controls">
+  From:
+  <select id="from">
+    <option value="24.8607,67.0011">Karachi</option>
+    <option value="31.5204,74.3587">Lahore</option>
+    <option value="33.6844,73.0479">Islamabad</option>
+  </select>
+
+  To:
+  <select id="to">
+    <option value="31.5204,74.3587">Lahore</option>
+    <option value="24.8607,67.0011">Karachi</option>
+    <option value="33.6844,73.0479">Islamabad</option>
+  </select>
+
+  <button onclick="route()">Find Route</button>
+
+  <p id="result"></p>
+</div>
+
+<script>
+var map = L.map('map').setView([30.3753, 69.3451], 5);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18
+}).addTo(map);
+
+let line;
+
+function route(){
+  let from = document.getElementById("from").value.split(",");
+  let to = document.getElementById("to").value.split(",");
+
+  if(line) map.removeLayer(line);
+
+  line = L.polyline([
+    [parseFloat(from[0]), parseFloat(from[1])],
+    [parseFloat(to[0]), parseFloat(to[1])]
+  ], {color: 'blue'}).addTo(map);
+
+  map.fitBounds(line.getBounds());
+
+  document.getElementById("result").innerText =
+    "Route generated. (Traffic detection demo)";
+}
+</script>
+
+</body>
+</html>
